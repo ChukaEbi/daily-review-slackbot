@@ -8,7 +8,7 @@ var bot = new SlackBot({
 
 var users;
 bot.getUsers().then(function(data) {
-  var job = new CronJob(' */5 * * * * *', function() {
+  var job = new CronJob(' */20 * * * * *', function() {
     users.forEach(function(person){
       bot.postMessageToUser(person.name, "We are awesome").always(function(data){
       });
