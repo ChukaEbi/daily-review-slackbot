@@ -1,12 +1,24 @@
+var SlackBot = require('slackbots');
 var CronJob = require('cron').CronJob;
 
-var job = new CronJob(' */5 * * * * *', function() {
-  console.log('Hi there');
-},
-  null,
-  true,
-  'Europe/London'
-);
+var bot = new SlackBot({
+    token: process.env.SLACKBOT_TOKEN,
+    name: 'daily-review-bot'
+});
 
-job.start();
+var users;
+bot.getUsers().then(function(data) {
+  var job = new CronJob(' */5 * * * * *', function() {
+    users.forEach(function(person){
+      bot.postMessageToUser(person.name, "We are awesome").always(function(data){
+      });
+    });
+    },
+    null,
+    true,
+    'Europe/London'
+  );
+  job.start();
+}).fail(console.log.bind(console));
+
 

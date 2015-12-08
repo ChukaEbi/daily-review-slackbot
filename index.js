@@ -6,7 +6,8 @@ var bot = new SlackBot({
     name: 'daily-review-bot'
   });
 
-  bot.on('start', function() {
+
+    bot.on('start', function() {
     bot.getUsers().always(function(data){
       var users;
       users = data._value.members;
@@ -18,3 +19,4 @@ var bot = new SlackBot({
       });
     });
   });
+
