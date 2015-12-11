@@ -3,23 +3,31 @@ var CronJob = require('cron').CronJob;
 
 var bot = new SlackBot({
     token: process.env.SLACKBOT_TOKEN,
-    name: 'daily-review-bot'
+    name: 'shefbot'
 });
 
+
 var users;
-bot.getUsers().then(function(data) {
-  users = data.members;
-  var job = new CronJob(' */20 * * * * *', function() {
-    users.forEach(function(person){
-      bot.postMessageToUser(person.name, "We are awesome").always(function(data){
-      });
-    });
-    },
-    null,
-    true,
-    'Europe/London'
+var job;
+
+function postNotification(person){
+  bot.postMessageToUser(person.name, "Please log in and fill out the brief form:\nhttps://shining-fire-9962.firebaseapp.com/");
+}
+
+function sendReminder(channel){
+  users = channel.members;
+  job = new CronJob('*/10 * * * * *', function(){
+    users.forEach(postNotification);
+  },
+  null,
+  true,
+  'Europe/London'
   );
-  job.start();
-}).fail(console.log.bind(console));
+}
+
+
+
+bot.getUsers().then(sendReminder)
+.fail(console.log.bind(console));
 
 
